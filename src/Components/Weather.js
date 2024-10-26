@@ -1,26 +1,44 @@
 import "./Weather.css";
-import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import clear from "../assets/clear.png";
 import cloudy from "../assets/cloudy.png";
 import partlySunny from "../assets/partlySunny.png";
+import rain from "../assets/rain.png";
+import mist from "../assets/mist.png";
 import thunder from "../assets/thunder.png";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Weather = () => {
+  const [weatherData, setWeatherData] = useState(false);
+
+  const allIcons = {
+    "01d": clear,
+    "02d": partlySunny,
+    "03d": cloudy,
+    "04d": cloudy,
+    "09d": rain,
+    "10d": rain,
+    "11d": thunder,
+    //"13d" : snow,
+    "50d": mist,
+  };
   const search = async (city_name) => {
     const apiKey = process.env.REACT_APP_API_KEY;
     try {
       const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?q=${city_name}&appid=${apiKey}`
+        `https://api.openweathermap.org/data/2.5/weather?q=${city_name}&units=metric&appid=${apiKey}`
       );
-      const res= await fetch(
-        `api.openweathermap.org/data/2.5/forecast/daily?lat=44.34&lon=10.99&cnt=7&appid=${apiKey}`
-      );
-      console.log(res);
-      console.log("Hello");
-      console.log(response);
+      const data = await response.json();
+      console.log(data);
+      const icon = allIcons[data.weather[0].icon] || clear;
+      setWeatherData({
+        humidity: data.main.humidity,
+        windSpeed: data.wind.speed,
+        temperature: Math.floor(data.main.temp),
+        location: data.name,
+        icon: icon,
+      });
     } catch (error) {}
   };
   useEffect(() => {
@@ -40,16 +58,16 @@ const Weather = () => {
           </button>
         </div>
         <img src={clear} alt=""></img>
-        <p className="temp">16°C</p>
-        <p className="location">London</p>
+        <p className="temp">{weatherData.temperature}°C</p>
+        <p className="location">{weatherData.location}</p>
         <div className="weather-data">
           <div className="col">
             <span> Humidity</span>
-            <br /> 57%
+            <br /> {weatherData.humidity}%
           </div>
           <div className="col">
             <span> Wind Speed</span>
-            <br /> 6.8km/h
+            <br /> {weatherData.windSpeed}km/h
           </div>
         </div>
       </div>
