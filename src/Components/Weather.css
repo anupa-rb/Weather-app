@@ -46,21 +46,19 @@ img{
     color:white;
     font-size: 20px;
 }
-.col-h{
+.weather-data{
+  display: flex;;
+}
+.col{
     background-color: #756cd6cc;
     padding: 8px;
     border-radius: 10px;
-    align-self: left;
-    display: inline-block;
-    margin: 20px;
+    margin: 10px;
+    margin-top: 20px;
     color: white;
 }
-.col-s{
-    background-color: #756cd6cc;
-    color: white;
-    margin: 20px;
-    padding: 8px;
-    border-radius: 10px;
-    align-self: self-end;
-    display: inline-block;
+.col span{
+  font-size: 18px;
+  font-weight: bold;
+  margin: 10px;
 }
