@@ -7,10 +7,11 @@ import partlySunny from "../assets/partlySunny.png";
 import rain from "../assets/rain.png";
 import mist from "../assets/mist.png";
 import thunder from "../assets/thunder.png";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const Weather = () => {
   const [weatherData, setWeatherData] = useState(false);
+  const inputRef = useRef();
 
   const allIcons = {
     "01d": clear,
@@ -42,7 +43,7 @@ const Weather = () => {
     } catch (error) {}
   };
   useEffect(() => {
-    search("London");
+    search("Mumbai");
   }, []);
   return (
     <>
@@ -51,13 +52,19 @@ const Weather = () => {
           <input
             type="text"
             placeholder="search"
+            ref={inputRef}
             style={{ backgroundColor: "white" }}
           ></input>
-          <button className="btn">
+          <button
+            className="btn"
+            onClick={() => {
+              search(inputRef.current.value);
+            }}
+          >
             <FontAwesomeIcon className="icon" icon={faMagnifyingGlass} />
           </button>
         </div>
-        <img src={clear} alt=""></img>
+        <img src={weatherData.icon} alt=""></img>
         <p className="temp">{weatherData.temperature}°C</p>
         <p className="location">{weatherData.location}</p>
         <div className="weather-data">
