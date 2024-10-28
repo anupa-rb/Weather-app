@@ -26,11 +26,17 @@ const Weather = () => {
   };
   const search = async (city_name) => {
     const apiKey = process.env.REACT_APP_API_KEY;
+    // if (city_name === "") {
+    //   alert("Enter City Name!");
+    // }
     try {
       const response = await fetch(
         `https://api.openweathermap.org/data/2.5/weather?q=${city_name}&units=metric&appid=${apiKey}`
       );
       const data = await response.json();
+      if (!response.ok) {
+        alert(data.message);
+      }
       console.log(data);
       const icon = allIcons[data.weather[0].icon] || clear;
       setWeatherData({
@@ -64,19 +70,25 @@ const Weather = () => {
             <FontAwesomeIcon className="icon" icon={faMagnifyingGlass} />
           </button>
         </div>
-        <img src={weatherData.icon} alt=""></img>
-        <p className="temp">{weatherData.temperature}°C</p>
-        <p className="location">{weatherData.location}</p>
-        <div className="weather-data">
-          <div className="col">
-            <span> Humidity</span>
-            <br /> {weatherData.humidity}%
-          </div>
-          <div className="col">
-            <span> Wind Speed</span>
-            <br /> {weatherData.windSpeed}km/h
-          </div>
-        </div>
+        {{ weatherData } ? (
+          <>
+            <img src={weatherData.icon} alt=""></img>
+            <p className="temp">{weatherData.temperature}°C</p>
+            <p className="location">{weatherData.location}</p>
+            <div className="weather-data">
+              <div className="col">
+                <span> Humidity</span>
+                <br /> {weatherData.humidity}%
+              </div>
+              <div className="col">
+                <span> Wind Speed</span>
+                <br /> {weatherData.windSpeed}km/h
+              </div>
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
       </div>
     </>
   );
